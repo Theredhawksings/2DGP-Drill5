@@ -89,9 +89,9 @@ while running:
     delay(0.05)
 
     if(x<0 or x>800):
-        break
+        running = False
     elif (y < 0 or y > 600):
-        break
+        running = False
 
     delay(0.01)
 
