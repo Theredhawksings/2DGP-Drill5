@@ -6,6 +6,31 @@ ground = load_image('TUK_GROUND.png')
 character = load_image('run_animation.png')
 
 
+frame_x = [12,73,131,207,309,413]
+frame_widths = [41, 40, 41, 65, 65 , 66]
+frame_y = [30, 150, 270, 390]
+frame_height = 66
+
+def draw_character(character, state, frame, x, y, frame_widths, frame_height, frame_x):
+    width = 200
+    height = 200
+    scale_factor = 1.63
+    if state == 1:
+        index = 1
+    elif state == 2:
+        index = 3
+    elif state == 3:
+        index = 0
+    elif state == 4:
+       index = 2
+
+    if frame <= 2:
+        draw_width = int(frame_widths[frame] * scale_factor)
+    else:
+        draw_width = frame_widths[frame]
+
+    character.clip_draw(frame_x[frame], frame_y[index], frame_widths[frame], frame_height, x, y, draw_width, frame_height)
+
 def handle_events():
     global running,dirx,diry,state
 
@@ -46,35 +71,29 @@ frame = 0
 
 dirx = 0
 diry = 0
-facing_right = True
 state = 1
 
 while running:
     clear_canvas()
-    ground.draw(400,300)
+    ground.draw(400, 300)
 
-    if state == 1:
-        character.clip_draw(48 * frame, 0, 48, 48, x, y, 200, 200)
-    elif state == 2:
-        character.clip_draw(48 * frame, 144, 48, 48, x, y, 200, 200)
-    elif state == 3:
-        character.clip_draw(48 * frame, 96, 48, 48, x, y, 200, 200)
-    elif state == 4:
-        character.clip_draw(48 * frame, 48, 48, 48, x, y, 200, 200)
+    x += dirx * 5  #
+    y += diry * 5
+
+    frame = (frame + 1) % 5
+
+    draw_character(character, state, frame, x, y, frame_widths, frame_height, frame_x)
 
     update_canvas()
     handle_events()
-    frame = (frame+1)%2
-
-    x += dirx * 10
-    y += diry * 10
+    delay(0.05)
 
     if(x<0 or x>800):
         break
     elif (y < 0 or y > 600):
         break
 
-    delay(0.1)
+    delay(0.01)
 
 
 close_canvas()
